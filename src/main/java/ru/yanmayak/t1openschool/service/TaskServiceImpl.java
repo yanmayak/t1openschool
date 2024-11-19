@@ -1,5 +1,6 @@
 package ru.yanmayak.t1openschool.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yanmayak.t1openschool.dto.TaskDto;
@@ -58,6 +59,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(UUID taskId) {
+        if (!taskRepository.existsById(taskId)) {
+            throw new EntityNotFoundException("Задача не найдена");
+        }
         taskRepository.deleteById(taskId);
     }
 }
