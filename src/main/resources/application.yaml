@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${PG_URL:jdbc:postgresql://localhost:5432/t1openschool}
+    username: ${PG_ROOT:postgres}
+    password: ${PG_PASS:admin}
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: ${HIKARI_MAXIMUM_POOL_SIZE:5}
+      jdbc-url: ${PG_URL:jdbc:postgresql://localhost:5432/t1openschool}
+      schema: public
+springdoc:
+  swagger-ui:
+    path: api
