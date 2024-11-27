@@ -1,4 +1,11 @@
 spring:
+  mail:
+    host: ${MAIL_HOST:smtp.yandex.ru}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    email_alias: ${MAIL_ALIAS}
+    protocol: ${MAIL_PROTOCOL:smtps}
   jpa:
     database: POSTGRESQL
     show-sql: true
@@ -17,3 +24,16 @@ spring:
 springdoc:
   swagger-ui:
     path: api
+t1:
+  kafka:
+    bootstrap:
+      server: localhost:9092
+    consumer:
+      group-id: t1openschool
+      max.poll.records: 10
+    producer:
+      enable: true
+    topic:
+      task_status: task_status
+    listener:
+      poll-timeout: 1000

@@ -17,16 +17,12 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
     @Before("@annotation(LogExecution)")
     public void logBefore(JoinPoint joinPoint) {
-        log.info("Вызван метод {}",
-                joinPoint.getSignature().getName()
-        );
+        log.info("Вызван метод {}", joinPoint.getSignature().getName());
     }
 
     @After("@annotation(LogExecution)")
     public void logAfter(JoinPoint joinPoint) {
-        log.info("Метод {} завершен",
-                joinPoint.getSignature().getName()
-        );
+        log.info("Метод {} завершен", joinPoint.getSignature().getName());
     }
 
     @AfterThrowing(pointcut = "@annotation(LogException)", throwing = "throwable")
@@ -48,14 +44,10 @@ public class LoggingAspect {
 
     @Around("execution(void ru.yanmayak.t1openschool.controller..*(..))")
     public void logAroundVoidMethods(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("Метод {} вызван",
-                joinPoint.getSignature().getName()
-        );
+        log.info("Метод {} вызван", joinPoint.getSignature().getName());
         try {
             joinPoint.proceed();
-            log.info("Метод {} выполнен успешно",
-                    joinPoint.getSignature().getName()
-            );
+            log.info("Метод {} выполнен успешно", joinPoint.getSignature().getName());
         }
         catch (Throwable throwable) {
             log.error("Метод {} завершен с ошибкой: {} ",

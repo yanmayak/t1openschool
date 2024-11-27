@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.yanmayak.t1openschool.entity.TaskStatus;
 
 import java.util.UUID;
 
@@ -29,4 +30,8 @@ public class TaskDto {
     @Schema(description = "Идентификатор автора задачи")
     @NotBlank
     private UUID userId;
+
+    @Schema(description = "Статус задачи")
+    @NotBlank
+    private TaskStatus status;
 }
