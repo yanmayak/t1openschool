@@ -4,7 +4,7 @@ spring:
     port: ${MAIL_PORT:465}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
-    email_alias: ${MAIL_ALIAS}
+    email: ${EMAIL}
     protocol: ${MAIL_PROTOCOL:smtps}
   jpa:
     database: POSTGRESQL

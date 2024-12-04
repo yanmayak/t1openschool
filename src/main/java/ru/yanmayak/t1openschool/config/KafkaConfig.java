@@ -95,7 +95,7 @@ public class KafkaConfig {
         return handler;
     }
 
-    @Bean("task")
+    @Bean("task_status")
     public KafkaTemplate<String, TaskDto> kafkaTemplate(ProducerFactory<String, TaskDto> producerPatFactory) {
         return new KafkaTemplate<>(producerPatFactory);
     }
@@ -104,7 +104,7 @@ public class KafkaConfig {
     @ConditionalOnProperty(value = "t1.kafka.producer.enable",
         havingValue = "true",
         matchIfMissing = true)
-    public KafkaTaskProducer taskProducer(@Qualifier("task") KafkaTemplate<String, TaskDto> kafkaTemplate) {
+    public KafkaTaskProducer taskProducer(@Qualifier("task_status") KafkaTemplate<String, TaskDto> kafkaTemplate) {
         kafkaTemplate.setDefaultTopic(taskTopic);
         return new KafkaTaskProducer(kafkaTemplate);
     }

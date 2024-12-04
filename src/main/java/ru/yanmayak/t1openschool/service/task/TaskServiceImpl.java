@@ -1,6 +1,5 @@
 package ru.yanmayak.t1openschool.service.task;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yanmayak.t1openschool.dto.TaskDto;
@@ -54,8 +53,9 @@ public class TaskServiceImpl implements TaskService {
                 taskRepository.findById(taskId)
                         .map(task -> {
                             task.setStatus(taskStatus);
+                            Task savedTask = taskRepository.save(task);
                             kafkaTaskProducer.sendStatusUpdate(taskId, taskStatus);
-                            return taskRepository.save(task);
+                            return savedTask;
                         }).orElseThrow(() -> new TaskNotFoundException("Task not found"))
         );
     }

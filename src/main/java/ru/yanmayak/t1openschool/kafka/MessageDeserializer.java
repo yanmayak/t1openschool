@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
+//An example of message deserializer
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

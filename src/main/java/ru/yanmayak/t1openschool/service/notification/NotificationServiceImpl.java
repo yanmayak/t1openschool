@@ -11,7 +11,7 @@ import ru.yanmayak.t1openschool.exception.NotificationException;
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
-    @Value("${spring.mail.email_alias}") //enter your data in application.yaml to test email service
+    @Value("${spring.mail.email}") //enter your data in application.yaml to test email service
     private String emailAlias;
 
     private final JavaMailSender mailSender;
