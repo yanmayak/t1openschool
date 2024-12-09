@@ -37,6 +37,7 @@ t1:
       task_status: task_status
     listener:
       poll-timeout: 1000
-logging:
-  aspect:
-    level: INFO
+aspect:
+  logger:
+    enabled: true
+    level: warn

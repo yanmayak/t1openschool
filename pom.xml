@@ -99,7 +99,7 @@
         <!-- Logging starter JAR -->
         <dependency>
             <groupId>ru.yanmayak</groupId>
-            <artifactId>Starter</artifactId>
+            <artifactId>logging-starter</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
