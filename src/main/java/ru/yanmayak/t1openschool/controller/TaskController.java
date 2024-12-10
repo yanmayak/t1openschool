@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yanmayak.aspect.LogException;
@@ -18,9 +19,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/tasks")
 @Tag(name = "Tasks")
-@RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
+
+    public TaskController(@Qualifier("TaskSecure") TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @LogExecution
     @LogException

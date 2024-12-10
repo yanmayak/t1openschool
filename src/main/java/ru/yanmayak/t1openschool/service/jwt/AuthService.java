@@ -21,8 +21,8 @@ public class AuthService {
     private final UserService userService;
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public JwtAuthResponse signUp(SignUpRequest request) {
@@ -32,7 +32,7 @@ public class AuthService {
                                 User.builder()
                                         .username(request.getUsername())
                                         .email(request.getEmail())
-                                        .password(request.getPassword())
+                                        .password(passwordEncoder.encode(request.getPassword()))
                                         .role(UserRole.ROLE_USER)
                                         .build()
                         )
