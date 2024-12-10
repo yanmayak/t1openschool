@@ -41,3 +41,6 @@ aspect:
   logger:
     enabled: true
     level: warn
+jwt:
+  token:
+    secret: secret
