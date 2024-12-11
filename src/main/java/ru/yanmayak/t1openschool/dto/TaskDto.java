@@ -29,7 +29,7 @@ public class TaskDto {
 
     @Schema(description = "Идентификатор автора задачи")
     @NotBlank
-    private UUID userId;
+    private UserDto author;
 
     @Schema(description = "Статус задачи")
     @NotBlank

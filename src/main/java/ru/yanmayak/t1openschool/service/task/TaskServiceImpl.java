@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
+@Service("Tasks")
 @AllArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
@@ -60,7 +60,6 @@ public class TaskServiceImpl implements TaskService {
         );
     }
 
-    @Override
     public List<TaskDto> getTasks() {
         return taskRepository.findAll()
                 .stream()

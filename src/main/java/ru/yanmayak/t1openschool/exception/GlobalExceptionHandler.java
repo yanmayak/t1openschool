@@ -11,8 +11,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNotificationException(NotificationException e) {
         return new ErrorResponse(
-                e.getMessage(),
-                HttpStatus.NOT_FOUND.value()
+                e.getMessage(), HttpStatus.NOT_FOUND.value()
         );
     }
 
@@ -20,8 +19,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleTaskNotFoundException(TaskNotFoundException e) {
         return new ErrorResponse(
-                e.getMessage(),
-                HttpStatus.NOT_FOUND.value()
+                e.getMessage(), HttpStatus.NOT_FOUND.value()
+        );
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ErrorResponse handleUnauthorizedException(UnauthorizedException e) {
+        return new ErrorResponse(
+                e.getMessage(), HttpStatus.UNAUTHORIZED.value()
         );
     }
 }

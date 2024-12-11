@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://${PG_HOST:localhost:5432}/
+    username: ${PG_ROOT:postgres}
+    password: ${PG_PASS:0000}
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: ${HIKARI_MAXIMUM_POOL_SIZE:5}
+      jdbc-url: jdbc:postgresql://${PG_HOST:localhost:5432}/
+      schema: public
+springdoc:
+  swagger-ui:
+    path: api
+aspect:
+  logger:
+    enabled: true
+    level: warn
+jwt:
+  token:
+    secret: secret
