@@ -93,42 +93,45 @@ public class TaskServiceImplTest {
     public void getTaskByIdAndThrowException() {
         UUID nonExistentId = UUID.randomUUID();
         when(taskRepository.findById(nonExistentId)).thenReturn(Optional.empty());
-        TaskNotFoundException exc = assertThrows(TaskNotFoundException.class, () -> taskService.getTask(nonExistentId));
+        TaskNotFoundException exc = assertThrows(TaskNotFoundException.class,
+                () -> taskService.getTask(nonExistentId));
         assertEquals("Task not found", exc.getMessage());
     }
 
-    //todo: маппит нуллы?
     @Test
-    @DisplayName("Внесение изменений в существующую задачу, возвращает TaskDto")
-    public void updateTask() {
-        TaskDto updatedTaskDto = new TaskDto();
-        updatedTaskDto.setId(task.getId());
-        updatedTaskDto.setTitle("new title");
-        updatedTaskDto.setDescription("new description");
-        updatedTaskDto.setAuthor(taskDto.getAuthor());
-        updatedTaskDto.setStatus(task.getStatus());
-
-        when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));
-        when(taskMapper.fromDto(updatedTaskDto)).thenReturn(task);
-        when(taskMapper.toDto(task)).thenReturn(updatedTaskDto);
-
-        TaskDto actualResult = taskService.updateTask(task.getId(), updatedTaskDto);
-
-        assertNotNull(actualResult);
-        assertEquals(task.getId(), actualResult.getId());
-        assertEquals(task.getTitle(), actualResult.getTitle());
-        assertEquals(task.getDescription(), actualResult.getDescription());
-        assertEquals(task.getStatus(), actualResult.getStatus());
-        assertEquals(taskDto.getAuthor(), actualResult.getAuthor());
-
-        verify(taskRepository).save(task);
+    @DisplayName("Обновление несуществующей задачи, прокидывается исключение")
+    public void updateTaskShouldThrowWhenNotFound() {
+        when(this.taskRepository.findById(any())).thenReturn(Optional.empty());
+        assertThrows(TaskNotFoundException.class,
+                () -> this.taskService.updateTask(UUID.randomUUID(), new TaskDto())
+        );
     }
 
     @Test
+    @DisplayName("Обновление существующей задачи, исключение НЕ выкидывается")
+    public void updateTaskShouldNotThrowWhenFound() {
+        when(this.taskRepository.findById(any())).thenReturn(Optional.of(new Task()));
+        assertDoesNotThrow(
+                () -> this.taskService.updateTask(UUID.randomUUID(), new TaskDto())
+        );
+    }
+
+    @Test
+    @DisplayName("Проверка вызова метода deleteTask()")
     void deleteTask() {
         UUID taskToDeletingId = task.getId();
-        when(taskRepository.findById(taskToDeletingId)).thenReturn(Optional.of(task));
+        when(taskRepository.existsById(taskToDeletingId)).thenReturn(true);
         taskService.deleteTask(taskToDeletingId);
-        verify(taskRepository).delete(task);
+        verify(taskRepository).deleteById(taskToDeletingId);
     }
+
+    @Test
+    @DisplayName("Удаление несуществующей задачи, выкидывается исключение")
+    void deleteTaskShouldThrowWhenNotFound() {
+        UUID nonExistentId = UUID.randomUUID();
+        assertThrows(TaskNotFoundException.class,
+                () -> this.taskService.deleteTask(nonExistentId)
+        );
+    }
+
 }

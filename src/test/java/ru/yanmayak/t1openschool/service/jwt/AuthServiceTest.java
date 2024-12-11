@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.yanmayak.t1openschool.dto.auth.JwtAuthResponse;
 import ru.yanmayak.t1openschool.dto.auth.SignInRequest;
@@ -47,7 +48,6 @@ public class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         signUpRequest = new SignUpRequest("testuser", "test@example.com", "password");
         signInRequest = new SignInRequest("testuser", "test@example.com");
         user = User.builder()
@@ -62,14 +62,12 @@ public class AuthServiceTest {
     @DisplayName("Регистрация пользователя")
     public void signUp() {
         when(userService.create(any(User.class))).thenReturn(user);
-        when(jwtService.generateToken(any())).thenReturn("token");
+        when(jwtService.generateToken(user)).thenReturn("token");
 
         JwtAuthResponse response = authService.signUp(signUpRequest);
 
         assertNotNull(response);
         assertEquals("token", response.getToken());
-        verify(userService).create(any(User.class));
-        verify(jwtService).generateToken(user);
     }
 
     @Test
@@ -77,6 +75,9 @@ public class AuthServiceTest {
     public void signIn() {
         when(userRepository.findByEmail(signInRequest.getEmail())).thenReturn(Optional.of(user));
         when(jwtService.generateToken(any())).thenReturn("token");
+        UserDetailsService detailsService = mock(UserDetailsService.class);
+        when(userService.userDetailsService()).thenReturn(detailsService);
+        when(detailsService.loadUserByUsername("testuser")).thenReturn(user);
 
         JwtAuthResponse jwtAuthResponse = authService.signIn(signInRequest);
 

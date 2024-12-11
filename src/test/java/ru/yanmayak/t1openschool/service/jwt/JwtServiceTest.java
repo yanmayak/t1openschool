@@ -31,8 +31,7 @@ public class JwtServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        jwtService = new JwtService();
-        jwtService.setSecret(secret);
+        jwtService = new JwtService(secret);
     }
 
     @Test

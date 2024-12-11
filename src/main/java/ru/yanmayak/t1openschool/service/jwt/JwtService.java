@@ -18,10 +18,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-@Setter //todo: необходим для тестов?????
 public class JwtService {
-    @Value("${jwt.token.secret}")
-    private String secret;
+    private final String secret;
+
+    JwtService(@Value("${jwt.token.secret}") String secret) {
+        this.secret = secret;
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -51,17 +53,16 @@ public class JwtService {
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
-    //todo: protected для тестов?
-    protected Key getSigningKey() {
+    public Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    protected Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    protected boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
