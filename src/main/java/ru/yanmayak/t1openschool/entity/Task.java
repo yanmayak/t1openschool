@@ -26,8 +26,9 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author")
+    private User author;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

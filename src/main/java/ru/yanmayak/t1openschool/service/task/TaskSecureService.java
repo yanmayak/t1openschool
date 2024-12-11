@@ -33,7 +33,7 @@ public class TaskSecureService implements TaskService {
 
     @Override
     public TaskDto createTask(TaskDto task) {
-        if(!taskCreatedByUser(SecurityContextHolder.getContext().getAuthentication().getName(), task.getUserId())) {
+        if(!taskCreatedByUser(SecurityContextHolder.getContext().getAuthentication().getName(), task.getAuthor().getId())) {
             throw new UnauthorizedException("User not allowed to create a new task");
         }
         return taskService.createTask(task);
@@ -48,7 +48,7 @@ public class TaskSecureService implements TaskService {
     public TaskDto updateTask(UUID taskId, TaskDto task) {
         boolean isTaskAuthor = taskCreatedByUser(
                 SecurityContextHolder.getContext().getAuthentication().getName(),
-                taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Not Found")).getUserId()
+                taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Not Found")).getAuthor().getId()
         );
         if(!isTaskAuthor) {
             throw new UnauthorizedException("User not allowed to update other user's task");
@@ -60,9 +60,8 @@ public class TaskSecureService implements TaskService {
     public TaskDto updateTaskStatus(UUID taskId, TaskStatus taskStatus) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Not Found"));
-        boolean isTaskAuthor = taskCreatedByUser(username, task.getUserId());
-        boolean isTaskAssignee = taskCreatedByUser(username, task.getUserId());
-        if(!isTaskAuthor && !isTaskAssignee) {
+        boolean isTaskAuthor = taskCreatedByUser(username, task.getAuthor().getId());
+        if(!isTaskAuthor) {
             throw new UnauthorizedException("Only task author and task assignee can change task status");
         }
         return taskService.updateTaskStatus(taskId, taskStatus);
@@ -76,7 +75,7 @@ public class TaskSecureService implements TaskService {
     public void deleteTask(UUID taskId) {
         boolean isTaskAuthor = taskCreatedByUser(
                 SecurityContextHolder.getContext().getAuthentication().getName(),
-                taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Not Found")).getUserId()
+                taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task Not Found")).getAuthor().getId()
         );
         if(!isTaskAuthor) {
             throw new UnauthorizedException("User not allowed to delete other user's task");

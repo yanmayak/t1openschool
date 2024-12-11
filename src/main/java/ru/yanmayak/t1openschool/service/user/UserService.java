@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.yanmayak.t1openschool.entity.User;
 import ru.yanmayak.t1openschool.entity.UserRole;
+import ru.yanmayak.t1openschool.exception.UserNotFoundException;
 import ru.yanmayak.t1openschool.repository.UserRepository;
 
 @Service
@@ -30,7 +31,7 @@ public class UserService {
 
     public User getByUsername(String username) {
         return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                .orElseThrow(() -> new UserNotFoundException("Username not found"));
     }
 
     public UserDetailsService userDetailsService() {
